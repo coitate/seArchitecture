@@ -1,0 +1,62 @@
+{
+    "description": "",
+    "dataSourceName": "docs-blob-datasource",
+    "skillsetName": "docs-skillset",
+    "targetIndexName": "docs-index",
+    "disabled": null,
+    "schedule": {
+        "interval": "PT1H",
+        "startTime": "2015-01-01T00:00:00Z"
+    },
+    "parameters": {
+        "batchSize": null,
+        "maxFailedItems": 10,
+        "maxFailedItemsPerBatch": 5,
+        "base64EncodeKeys": null,
+        "configuration": {
+            "dataToExtract": "contentAndMetadata",
+            "parsingMode": "default",
+            "imageAction": "generateNormalizedImages"
+        }
+    },
+    "fieldMappings": [],
+    "outputFieldMappings": [
+        {
+            "sourceFieldName": "/document/normalized_images/*/adults/*",
+            "targetFieldName": "adults",
+            "mappingFunction": null
+        },
+        {
+            "sourceFieldName": "/document/normalized_images/*/brands/*",
+            "targetFieldName": "brands",
+            "mappingFunction": null
+        },
+        {
+            "sourceFieldName": "/document/normalized_images/*/categories/*",
+            "targetFieldName": "categories",
+            "mappingFunction": null
+        },
+        {
+            "sourceFieldName": "/document/normalized_images/*/description",
+            "targetFieldName": "description",
+            "mappingFunction": null
+        },
+        {
+            "sourceFieldName": "/document/normalized_images/*/faces/*",
+            "targetFieldName": "faces",
+            "mappingFunction": null
+        },
+        {
+            "sourceFieldName": "/document/normalized_images/*/objects/*",
+            "targetFieldName": "objects",
+            "mappingFunction": null
+        },
+        {
+            "sourceFieldName": "/document/normalized_images/*/tags/*",
+            "targetFieldName": "tags",
+            "mappingFunction": null
+        }
+    ],
+    "cache": null,
+    "encryptionKey": null
+}

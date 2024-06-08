@@ -1,0 +1,64 @@
+{
+    "description": "",
+    "skills": [
+        {
+            "@odata.type": "#Microsoft.Skills.Vision.ImageAnalysisSkill",
+            "name": null,
+            "description": "Extract image analysis.",
+            "context": "/document/normalized_images/*",
+            "defaultLanguageCode": "en",
+            "visualFeatures": [
+                "adult",
+                "brands",
+                "categories",
+                "description",
+                "faces",
+                "objects",
+                "tags"
+            ],
+            "details": [],
+            "inputs": [
+                {
+                    "name": "image",
+                    "source": "/document/normalized_images/*",
+                    "sourceContext": null,
+                    "inputs": []
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "adult",
+                    "targetName": null
+                },
+                {
+                    "name": "brands",
+                    "targetName": null
+                },
+                {
+                    "name": "categories",
+                    "targetName": null
+                },
+                {
+                    "name": "description",
+                    "targetName": null
+                },
+                {
+                    "name": "faces",
+                    "targetName": null
+                },
+                {
+                    "name": "objects",
+                    "targetName": null
+                },
+                {
+                    "name": "tags",
+                    "targetName": null
+                }
+            ]
+        }
+    ],
+    "cognitiveServices": null,
+    "knowledgeStore": null,
+    "indexProjections": null,
+    "encryptionKey": null
+}
