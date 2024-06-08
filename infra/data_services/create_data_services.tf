@@ -45,6 +45,16 @@ resource "azurerm_storage_container" "docs" {
   container_access_type = "private"
 }
 
+resource "azurerm_storage_blob" "files" {
+  for_each = fileset(path.root, "data_services/docs/*")
+
+  name                   = trim(each.key, "data_services/docs/")
+  storage_account_name   = azurerm_storage_account.st.name
+  storage_container_name = azurerm_storage_container.docs.name
+  type                   = "Block"
+  source                 = each.key
+}
+
 # create AI services multi-service account
 resource "azurerm_cognitive_account" "aisa" {
   name                  = "aisa-${var.pj_name}-${var.target_rg.location}"
