@@ -5,6 +5,9 @@ variable "target_rg" {}
 
 # locals for data services
 locals {
+  ai_search = {
+    location = "eastus" # to use multi modal embedding https://learn.microsoft.com/azure/search/cognitive-search-skill-vision-vectorize
+  }
   openai = {
     location = "eastus2" # to use gpt-4o
     deployments = {
@@ -67,27 +70,27 @@ resource "azurerm_cognitive_account" "aisa" {
   tags = var.default_tags
 }
 
-# # create AI search
-# resource "azurerm_search_service" "srch" {
-#   name                = "srch-${var.pj_name}-${var.target_rg.location}"
-#   resource_group_name = var.target_rg.name
-#   location            = var.target_rg.location
-#   sku                 = "basic" # set basic when using semantic search
-#   semantic_search_sku = "free"
+# create AI search
+resource "azurerm_search_service" "srch" {
+  name                = "srch-${var.pj_name}-${local.ai_search.location}"
+  resource_group_name = var.target_rg.name
+  location            = local.ai_search.location
+  sku                 = "basic" # set basic when using semantic search
+  semantic_search_sku = "free"
 
-#   identity {
-#     type = "SystemAssigned"
-#   }
+  identity {
+    type = "SystemAssigned"
+  }
 
-#   tags = var.default_tags
-# }
+  tags = var.default_tags
+}
 
-# # assign role to AI Search for data access
-# resource "azurerm_role_assignment" "srch_read_blob" {
-#   scope                = azurerm_storage_account.st.id
-#   role_definition_name = "Storage Blob Data Contributor"
-#   principal_id         = azurerm_search_service.srch.identity[0].principal_id
-# }
+# assign role to AI Search for data access
+resource "azurerm_role_assignment" "srch_read_blob" {
+  scope                = azurerm_storage_account.st.id
+  role_definition_name = "Storage Blob Data Contributor" # to read and write
+  principal_id         = azurerm_search_service.srch.identity[0].principal_id
+}
 
 # create storage account for functions app
 resource "azurerm_storage_account" "st_func" {
@@ -187,6 +190,6 @@ output "openai_api_key" {
   value = azurerm_cognitive_account.oai.primary_access_key
 }
 
-# output "ai_search_api_key" {
-#   value = azurerm_search_service.srch.primary_key
-# }
+output "ai_search_api_key" {
+  value = azurerm_search_service.srch.primary_key
+}

@@ -1,6 +1,7 @@
 {
-    "description": "docs-datasource",
+    "description": null,
     "type": "azureblob",
+    "subtype": null,
     "credentials": {
         "connectionString": "ResourceId=/subscriptions/3034f4ab-fb4d-4661-a14a-2afced0cde34/resourceGroups/rg-ep7-sandbox-oitate/providers/Microsoft.Storage/storageAccounts/stsearchijapaneast;"
     },

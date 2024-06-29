@@ -20,43 +20,7 @@
         }
     },
     "fieldMappings": [],
-    "outputFieldMappings": [
-        {
-            "sourceFieldName": "/document/normalized_images/*/adults/*",
-            "targetFieldName": "adults",
-            "mappingFunction": null
-        },
-        {
-            "sourceFieldName": "/document/normalized_images/*/brands/*",
-            "targetFieldName": "brands",
-            "mappingFunction": null
-        },
-        {
-            "sourceFieldName": "/document/normalized_images/*/categories/*",
-            "targetFieldName": "categories",
-            "mappingFunction": null
-        },
-        {
-            "sourceFieldName": "/document/normalized_images/*/description",
-            "targetFieldName": "description",
-            "mappingFunction": null
-        },
-        {
-            "sourceFieldName": "/document/normalized_images/*/faces/*",
-            "targetFieldName": "faces",
-            "mappingFunction": null
-        },
-        {
-            "sourceFieldName": "/document/normalized_images/*/objects/*",
-            "targetFieldName": "objects",
-            "mappingFunction": null
-        },
-        {
-            "sourceFieldName": "/document/normalized_images/*/tags/*",
-            "targetFieldName": "tags",
-            "mappingFunction": null
-        }
-    ],
+    "outputFieldMappings": [],
     "cache": null,
     "encryptionKey": null
 }

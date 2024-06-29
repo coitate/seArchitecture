@@ -30,7 +30,7 @@ output "openai_api_key" {
   sensitive = true
 }
 
-# output "ai_search_api_key" {
-#   value     = module.data_services.ai_search_api_key
-#   sensitive = true
-# }
+output "ai_search_api_key" {
+  value     = module.data_services.ai_search_api_key
+  sensitive = true
+}
