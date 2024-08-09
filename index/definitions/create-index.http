@@ -1,7 +1,7 @@
 ### Params
 ### AI Search
 @AI_SRCH_ENDPOINT=https://srch-searchi-eastus.search.windows.net
-@AI_SRCH_API_VERSION=2024-05-01-preview 
+@AI_SRCH_API_VERSION=2024-05-01-preview
 @AI_SRCH_API_KEY=WRITE_KEY_HERE_AND_NEVER_COMMIT
 
 ### Cognitive Services
@@ -11,37 +11,41 @@
 @MODEL_VERSION=2023-04-15
 
 
-### embed_images_index ------------------------------------------------------------------------
-### Index ----------------------------------------
-@EMBED_IMAGE_INDEX_NAME=embed-images-index
-
-### List
-GET {{AI_SRCH_ENDPOINT}}/indexes?api-version={{AI_SRCH_API_VERSION}}
-Content-Type: application/json
-api-key: {{AI_SRCH_API_KEY}}
+### docs_chunk --------------------------------------------------------------------------------
+@DOCS_CHUNK_INDEX=docs-chunks
 
 ### Delete
-DELETE {{AI_SRCH_ENDPOINT}}/indexes/{{EMBED_IMAGE_INDEX_NAME}}?api-version={{AI_SRCH_API_VERSION}}
+DELETE {{AI_SRCH_ENDPOINT}}/indexes/{{DOCS_CHUNK_INDEX}}?api-version={{AI_SRCH_API_VERSION}}
 Content-Type: application/json
 api-key: {{AI_SRCH_API_KEY}}
 
 ### Create
-PUT {{AI_SRCH_ENDPOINT}}/indexes/{{EMBED_IMAGE_INDEX_NAME}}?api-version={{AI_SRCH_API_VERSION}}
+PUT {{AI_SRCH_ENDPOINT}}/indexes/{{DOCS_CHUNK_INDEX}}?api-version={{AI_SRCH_API_VERSION}}
 Content-Type: application/json
 api-key: {{AI_SRCH_API_KEY}}
 
-< ./embed_image_index.json
+< ./docs_chunk_index.json
 
+
+### docs_image --------------------------------------------------------------------------------
+@DOCS_IMAGE_INDEX=docs-images
+
+### Delete
+DELETE {{AI_SRCH_ENDPOINT}}/indexes/{{DOCS_IMAGE_INDEX}}?api-version={{AI_SRCH_API_VERSION}}
+Content-Type: application/json
+api-key: {{AI_SRCH_API_KEY}}
+
+### Create
+PUT {{AI_SRCH_ENDPOINT}}/indexes/{{DOCS_IMAGE_INDEX}}?api-version={{AI_SRCH_API_VERSION}}
+Content-Type: application/json
+api-key: {{AI_SRCH_API_KEY}}
+
+< ./docs_image_index.json
 
 
 ### docs_index --------------------------------------------------------------------------------
 ### DataSource -----------------------------------
 @DATASOURCE_NAME=docs-blob-datasource
-
-### List
-GET {{AI_SRCH_ENDPOINT}}/datasources?api-version={{AI_SRCH_API_VERSION}}
-Content-Type: application/json
-api-key: {{AI_SRCH_API_KEY}}
 
 ### Delete
 DELETE {{AI_SRCH_ENDPOINT}}/datasources/{{DATASOURCE_NAME}}?api-version={{AI_SRCH_API_VERSION}}
@@ -57,12 +61,7 @@ api-key: {{AI_SRCH_API_KEY}}
 
 
 ### Index ----------------------------------------
-@DOCS_INDEX_NAME=docs-index
-
-### List
-GET {{AI_SRCH_ENDPOINT}}/indexes?api-version={{AI_SRCH_API_VERSION}}
-Content-Type: application/json
-api-key: {{AI_SRCH_API_KEY}}
+@DOCS_INDEX_NAME=docs
 
 ### Delete
 DELETE {{AI_SRCH_ENDPOINT}}/indexes/{{DOCS_INDEX_NAME}}?api-version={{AI_SRCH_API_VERSION}}
@@ -80,11 +79,6 @@ api-key: {{AI_SRCH_API_KEY}}
 ### Skill Set ------------------------------------
 @SKILLSET_NAME=docs-skillset
 
-### List
-GET {{AI_SRCH_ENDPOINT}}/skillsets?api-version={{AI_SRCH_API_VERSION}}
-Content-Type: application/json
-api-key: {{AI_SRCH_API_KEY}}
-
 ### Delete
 DELETE {{AI_SRCH_ENDPOINT}}/skillsets/{{SKILLSET_NAME}}?api-version={{AI_SRCH_API_VERSION}}
 Content-Type: application/json
@@ -95,16 +89,11 @@ PUT {{AI_SRCH_ENDPOINT}}/skillsets/{{SKILLSET_NAME}}?api-version={{AI_SRCH_API_V
 Content-Type: application/json
 api-key: {{AI_SRCH_API_KEY}}
 
-< ./skillset.json
+< ./docs-skillset.json
 
 
 ### Indexer --------------------------------------
 @INDEXER_NAME=docs-indexer
-
-### List
-GET {{AI_SRCH_ENDPOINT}}/indexers?api-version={{AI_SRCH_API_VERSION}}
-Content-Type: application/json
-api-key: {{AI_SRCH_API_KEY}}
 
 ### Delete
 DELETE {{AI_SRCH_ENDPOINT}}/indexers/{{INDEXER_NAME}}/?api-version={{AI_SRCH_API_VERSION}}
@@ -116,7 +105,29 @@ PUT {{AI_SRCH_ENDPOINT}}/indexers/{{INDEXER_NAME}}?api-version={{AI_SRCH_API_VER
 Content-Type: application/json
 api-key: {{AI_SRCH_API_KEY}}
 
-< ./indexer.json
+{
+    "description": "",
+    "dataSourceName": "{{DATASOURCE_NAME}}",
+    "skillsetName": "{{SKILLSET_NAME}}",
+    "targetIndexName": "{{DOCS_INDEX_NAME}}",
+    "disabled": null,
+    "schedule": {},
+    "parameters": {
+        "batchSize": null,
+        "maxFailedItems": 10,
+        "maxFailedItemsPerBatch": 5,
+        "base64EncodeKeys": null,
+        "configuration": {
+            "dataToExtract": "contentAndMetadata",
+            "parsingMode": "default",
+            "imageAction": "generateNormalizedImages"
+        }
+    },
+    "fieldMappings": [],
+    "outputFieldMappings": [],
+    "cache": null,
+    "encryptionKey": null
+}
 
 ### Reset
 POST {{AI_SRCH_ENDPOINT}}/indexers/{{INDEXER_NAME}}/reset?api-version={{AI_SRCH_API_VERSION}}
@@ -128,7 +139,7 @@ POST {{AI_SRCH_ENDPOINT}}/indexers/{{INDEXER_NAME}}/run?api-version={{AI_SRCH_AP
 Content-Type: application/json
 api-key: {{AI_SRCH_API_KEY}}
 
-### Stautus
+### Status
 GET {{AI_SRCH_ENDPOINT}}/indexers/{{INDEXER_NAME}}/status?api-version={{AI_SRCH_API_VERSION}}
 Content-Type: application/json
 api-key: {{AI_SRCH_API_KEY}}
@@ -150,34 +161,67 @@ api-key: {{AI_SRCH_API_KEY}}
 }
 
 
-### Vector --------------------------------------
-### Embed image
+### Vector Search
+@VECTOR_SEARCH_API_VERSION=2023-11-01
+
+### Image
 # @name embed_image
 
 POST {{COGNITIVE_MULTI_ACCOUNT_ENDPOINT}}/computervision/retrieval:vectorizeImage?api-version={{COGNITIVE_MULTI_ACCOUNT_API_VERSION}}&model-version={{MODEL_VERSION}}
 Content-Type: application/octet-stream
 Ocp-Apim-Subscription-Key: {{COGNITIVE_MULTI_ACCOUNT_API_KEY}}
 
-< ./../images/normalized_images_11.jpg
+< ./../images/normalized_images_30.jpg
 
 ### Save value
 @vector_image={{embed_image.response.body.vector}}
 
-### Search
-@VECTOR_SEARCH_API_VERSION=2023-11-01
+### Image Vector Search
 
-POST {{AI_SRCH_ENDPOINT}}/indexes/{{EMBED_IMAGE_INDEX_NAME}}/docs/search?api-version={{VECTOR_SEARCH_API_VERSION}}
+POST {{AI_SRCH_ENDPOINT}}/indexes/{{DOCS_IMAGE_INDEX}}/docs/search?api-version={{VECTOR_SEARCH_API_VERSION}}
 Content-Type: application/json
 api-key: {{AI_SRCH_API_KEY}}
 
 {
     "count": true,
-    "select": "id,ParentKey",
+    "select": "id,URL",
     "vectorQueries": [
         {
             "kind": "vector",
             "vector": {{vector_image}},
             "fields": "image_vector",
+            "k": 5
+        }
+    ]
+}
+
+### Text
+# @name embed_text
+
+POST {{COGNITIVE_MULTI_ACCOUNT_ENDPOINT}}/computervision/retrieval:vectorizeText?api-version={{COGNITIVE_MULTI_ACCOUNT_API_VERSION}}&model-version={{MODEL_VERSION}}
+Content-Type: application/json
+Ocp-Apim-Subscription-Key: {{COGNITIVE_MULTI_ACCOUNT_API_KEY}}
+
+{
+    "text": "tell me about the Gobi desert."
+}
+
+### Save value
+@vector_text={{embed_text.response.body.vector}}
+
+### Text Vector Search
+POST {{AI_SRCH_ENDPOINT}}/indexes/{{DOCS_CHUNK_INDEX}}/docs/search?api-version={{VECTOR_SEARCH_API_VERSION}}
+Content-Type: application/json
+api-key: {{AI_SRCH_API_KEY}}
+
+{
+    "count": true,
+    "select": "id,URL,chunk",
+    "vectorQueries": [
+        {
+            "kind": "vector",
+            "vector": {{vector_text}},
+            "fields": "chunk_vector",
             "k": 5
         }
     ]

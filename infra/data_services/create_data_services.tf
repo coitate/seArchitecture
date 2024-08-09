@@ -92,68 +92,6 @@ resource "azurerm_role_assignment" "srch_read_blob" {
   principal_id         = azurerm_search_service.srch.identity[0].principal_id
 }
 
-# create storage account for functions app
-resource "azurerm_storage_account" "st_func" {
-  name                     = "st${var.pj_name}${var.target_rg.location}func"
-  resource_group_name      = var.target_rg.name
-  location                 = var.target_rg.location
-  account_tier             = "Standard"
-  account_replication_type = "LRS"
-
-  tags = var.default_tags
-}
-
-# create app service plan for functions app
-resource "azurerm_service_plan" "asp" {
-  name                = "asp-${var.pj_name}-${var.target_rg.location}"
-  resource_group_name = var.target_rg.name
-  location            = var.target_rg.location
-  os_type             = "Linux"
-  sku_name            = "Y1"
-
-  tags = var.default_tags
-}
-
-# create functions app
-resource "azurerm_linux_function_app" "func" {
-  name                       = "func-${var.pj_name}-${var.target_rg.location}"
-  resource_group_name        = var.target_rg.name
-  location                   = var.target_rg.location
-  storage_account_name       = azurerm_storage_account.st_func.name
-  storage_account_access_key = azurerm_storage_account.st_func.primary_access_key
-  service_plan_id            = azurerm_service_plan.asp.id
-
-  app_settings = {
-    AI_SERVICE_ENDPOINT = azurerm_cognitive_account.aisa.endpoint
-    AI_SERVICE_API_KEY  = azurerm_cognitive_account.aisa.primary_access_key
-  }
-
-  site_config {
-    application_insights_connection_string = azurerm_application_insights.appi.connection_string
-    application_insights_key               = azurerm_application_insights.appi.instrumentation_key
-
-    application_stack {
-      python_version = "3.11"
-    }
-
-    cors {
-      allowed_origins = ["https://portal.azure.com"]
-    }
-  }
-
-  tags = var.default_tags
-}
-
-# create application insights
-resource "azurerm_application_insights" "appi" {
-  name                = "appi-${var.pj_name}-${var.target_rg.location}"
-  location            = var.target_rg.location
-  resource_group_name = var.target_rg.name
-  application_type    = "other"
-
-  tags = var.default_tags
-}
-
 # create OpenAI
 resource "azurerm_cognitive_account" "oai" {
   name                  = join("", ["oai-${var.pj_name}-", local.openai.location])

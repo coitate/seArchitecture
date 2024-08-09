@@ -1,0 +1,125 @@
+{
+    "description": "",
+    "skills": [
+        {
+            "@odata.type": "#Microsoft.Skills.Vision.VectorizeSkill",
+            "context": "/document/normalized_images/*",
+            "modelVersion": "2023-04-15",
+            "inputs": [
+                {
+                    "name": "image",
+                    "source": "/document/normalized_images/*"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "vector",
+                    "targetName": "image_vector"
+                }
+            ]
+        },
+        {
+            "@odata.type": "#Microsoft.Skills.Text.SplitSkill",
+            "context": "/document/content",
+            "textSplitMode": "pages",
+            "maximumPageLength": 1000,
+            "pageOverlapLength": 200,
+            "maximumPagesToTake": null,
+            "defaultLanguageCode": "en",
+            "inputs": [
+                {
+                    "name": "text",
+                    "source": "/document/content"
+                },
+                {
+                    "name": "languageCode",
+                    "source": "/document/metadata_language"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "textItems",
+                    "targetName": null
+                }
+            ]
+        },
+        {
+            "@odata.type": "#Microsoft.Skills.Vision.VectorizeSkill",
+            "context": "/document/content/textItems/*",
+            "modelVersion": "2023-04-15",
+            "inputs": [
+                {
+                    "name": "text",
+                    "source": "/document/content/textItems/*"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "vector",
+                    "targetName": "chunk_vector"
+                }
+            ]
+        }
+    ],
+    "cognitiveServices": null,
+    "knowledgeStore": {
+        "storageConnectionString": "ResourceId=/subscriptions/3034f4ab-fb4d-4661-a14a-2afced0cde34/resourceGroups/rg-ep7-sandbox-oitate/providers/Microsoft.Storage/storageAccounts/stsearchijapaneast;",
+        "identity": null,
+        "projections": [
+            {
+                "tables": [],
+                "objects": [],
+                "files": [
+                    {
+                        "generatedKeyName": "projected-images",
+                        "inputs": [],
+                        "referenceKeyName": null,
+                        "source": "/document/normalized_images/*",
+                        "sourceContext": null,
+                        "storageContainer": "projected-images"
+                    }
+                ]
+            }
+        ],
+        "parameters": null
+    },
+    "indexProjections": {
+        "selectors": [
+            {
+                "targetIndexName": "docs-images",
+                "parentKeyFieldName": "ParentKey",
+                "sourceContext": "/document/normalized_images/*",
+                "mappings": [
+                    {
+                        "name": "image_vector",
+                        "source": "/document/normalized_images/*/image_vector"
+                    },
+                    {
+                        "name": "URL",
+                        "source": "/document/metadata_storage_path"
+                    }
+                ]
+            },
+            {
+                "targetIndexName": "docs-chunks",
+                "parentKeyFieldName": "ParentKey",
+                "sourceContext": "/document/content/textItems/*",
+                "mappings": [
+                    {
+                        "name": "chunk",
+                        "source": "/document/content/textItems/*"
+                    },
+                    {
+                        "name": "chunk_vector",
+                        "source": "/document/content/textItems/*/chunk_vector"
+                    },
+                    {
+                        "name": "URL",
+                        "source": "/document/metadata_storage_path"
+                    }
+                ]
+            }
+        ]
+    },
+    "encryptionKey": null
+}
