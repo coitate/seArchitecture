@@ -2,6 +2,86 @@
     "description": "",
     "skills": [
         {
+            "@odata.type": "#Microsoft.Skills.Text.V3.EntityRecognitionSkill",
+            "context": "/document",
+            "categories": [],
+            "defaultLanguageCode": "ja",
+            "minimumPrecision": 0.9,
+            "modelVersion": "",
+            "inputs": [
+                {
+                    "name": "text",
+                    "source": "/document/content"
+                },
+                {
+                    "name": "languageCode",
+                    "source": "/document/metadata_language"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "persons",
+                    "targetName": "persons"
+                },
+                {
+                    "name": "locations",
+                    "targetName": "locations"
+                },
+                {
+                    "name": "organizations",
+                    "targetName": "organizations"
+                },
+                {
+                    "name": "quantities",
+                    "targetName": "quantities"
+                },
+                {
+                    "name": "dateTimes",
+                    "targetName": "dateTimes"
+                },
+                {
+                    "name": "urls",
+                    "targetName": "urls"
+                },
+                {
+                    "name": "emails",
+                    "targetName": "emails"
+                },
+                {
+                    "name": "personTypes",
+                    "targetName": "personTypes"
+                },
+                {
+                    "name": "events",
+                    "targetName": "events"
+                },
+                {
+                    "name": "products",
+                    "targetName": "products"
+                },
+                {
+                    "name": "skills",
+                    "targetName": "skills"
+                },
+                {
+                    "name": "addresses",
+                    "targetName": "addresses"
+                },
+                {
+                    "name": "phoneNumbers",
+                    "targetName": "phoneNumbers"
+                },
+                {
+                    "name": "ipAddresses",
+                    "targetName": "ipAddresses"
+                },
+                {
+                    "name": "namedEntities",
+                    "targetName": "namedEntities"
+                }
+            ]
+        },
+        {
             "@odata.type": "#Microsoft.Skills.Vision.VectorizeSkill",
             "context": "/document/normalized_images/*",
             "modelVersion": "2023-04-15",
@@ -59,6 +139,86 @@
                     "targetName": "chunk_vector"
                 }
             ]
+        },
+        {
+            "@odata.type": "#Microsoft.Skills.Text.V3.EntityRecognitionSkill",
+            "context": "/document/content/textItems/*",
+            "categories": [],
+            "defaultLanguageCode": "ja",
+            "minimumPrecision": 0.9,
+            "modelVersion": "",
+            "inputs": [
+                {
+                    "name": "text",
+                    "source": "/document/content/textItems/*"
+                },
+                {
+                    "name": "languageCode",
+                    "source": "/document/metadata_language"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "persons",
+                    "targetName": "persons_in_chunk"
+                },
+                {
+                    "name": "locations",
+                    "targetName": "locations_in_chunk"
+                },
+                {
+                    "name": "organizations",
+                    "targetName": "organizations_in_chunk"
+                },
+                {
+                    "name": "quantities",
+                    "targetName": "quantities_in_chunk"
+                },
+                {
+                    "name": "dateTimes",
+                    "targetName": "dateTimes_in_chunk"
+                },
+                {
+                    "name": "urls",
+                    "targetName": "urls_in_chunk"
+                },
+                {
+                    "name": "emails",
+                    "targetName": "emails_in_chunk"
+                },
+                {
+                    "name": "personTypes",
+                    "targetName": "personTypes_in_chunk"
+                },
+                {
+                    "name": "events",
+                    "targetName": "events_in_chunk"
+                },
+                {
+                    "name": "products",
+                    "targetName": "products_in_chunk"
+                },
+                {
+                    "name": "skills",
+                    "targetName": "skills_in_chunk"
+                },
+                {
+                    "name": "addresses",
+                    "targetName": "addresses_in_chunk"
+                },
+                {
+                    "name": "phoneNumbers",
+                    "targetName": "phoneNumbers_in_chunk"
+                },
+                {
+                    "name": "ipAddresses",
+                    "targetName": "ipAddresses_in_chunk"
+                },
+                {
+                    "name": "namedEntities",
+                    "targetName": "namedEntities_in_chunk"
+                }
+            ]
         }
     ],
     "cognitiveServices": null,
@@ -106,6 +266,10 @@
                 "sourceContext": "/document/content/textItems/*",
                 "mappings": [
                     {
+                        "name": "URL",
+                        "source": "/document/metadata_storage_path"
+                    },
+                    {
                         "name": "chunk",
                         "source": "/document/content/textItems/*"
                     },
@@ -114,8 +278,60 @@
                         "source": "/document/content/textItems/*/chunk_vector"
                     },
                     {
-                        "name": "URL",
-                        "source": "/document/metadata_storage_path"
+                        "name": "people",
+                        "source": "/document/content/textItems/*/persons_in_chunk"
+                    },
+                    {
+                        "name": "organizations",
+                        "source": "/document/content/textItems/*/organizations_in_chunk"
+                    },
+                    {
+                        "name": "quantities",
+                        "source": "/document/content/textItems/*/quantities_"
+                    },
+                    {
+                        "name": "dateTimes",
+                        "source": "/document/content/textItems/*/dateTimes_in_chunk"
+                    },
+                    {
+                        "name": "urls",
+                        "source": "/document/content/textItems/*/urls_in_chunk"
+                    },
+                    {
+                        "name": "emails",
+                        "source": "/document/content/textItems/*/emails_in_chunk"
+                    },
+                    {
+                        "name": "personTypes",
+                        "source": "/document/content/textItems/*/personTypes_in_chunk"
+                    },
+                    {
+                        "name": "events",
+                        "source": "/document/content/textItems/*/events_in_chunk"
+                    },
+                    {
+                        "name": "products",
+                        "source": "/document/content/textItems/*/products_in_chunk"
+                    },
+                    {
+                        "name": "skills",
+                        "source": "/document/content/textItems/*/skills_in_chunk"
+                    },
+                    {
+                        "name": "addresses",
+                        "source": "/document/content/textItems/*/addresses_in_chunk"
+                    },
+                    {
+                        "name": "phoneNumbers",
+                        "source": "/document/content/textItems/*/phoneNumbers_in_chunk"
+                    },
+                    {
+                        "name": "ipAddresses",
+                        "source": "/document/content/textItems/*/ipAddresses_in_chunk"
+                    },
+                    {
+                        "name": "namedEntities",
+                        "source": "/document/content/textItems/*/namedEntities_in_chunk"
                     }
                 ]
             }

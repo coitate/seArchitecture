@@ -24,7 +24,7 @@ PUT {{AI_SRCH_ENDPOINT}}/indexes/{{DOCS_CHUNK_INDEX}}?api-version={{AI_SRCH_API_
 Content-Type: application/json
 api-key: {{AI_SRCH_API_KEY}}
 
-< ./docs_chunk_index.json
+< ./definitions/docs_chunk_index.json
 
 
 ### docs_image --------------------------------------------------------------------------------
@@ -40,7 +40,7 @@ PUT {{AI_SRCH_ENDPOINT}}/indexes/{{DOCS_IMAGE_INDEX}}?api-version={{AI_SRCH_API_
 Content-Type: application/json
 api-key: {{AI_SRCH_API_KEY}}
 
-< ./docs_image_index.json
+< ./definitions/docs_image_index.json
 
 
 ### docs_index --------------------------------------------------------------------------------
@@ -57,7 +57,7 @@ PUT {{AI_SRCH_ENDPOINT}}/datasources/{{DATASOURCE_NAME}}?api-version={{AI_SRCH_A
 Content-Type: application/json
 api-key: {{AI_SRCH_API_KEY}}
 
-< ./datasource.json
+< ./definitions/datasource.json
 
 
 ### Index ----------------------------------------
@@ -73,7 +73,7 @@ PUT {{AI_SRCH_ENDPOINT}}/indexes/{{DOCS_INDEX_NAME}}?api-version={{AI_SRCH_API_V
 Content-Type: application/json
 api-key: {{AI_SRCH_API_KEY}}
 
-< ./docs_index.json
+< ./definitions/docs_index.json
 
 
 ### Skill Set ------------------------------------
@@ -89,7 +89,7 @@ PUT {{AI_SRCH_ENDPOINT}}/skillsets/{{SKILLSET_NAME}}?api-version={{AI_SRCH_API_V
 Content-Type: application/json
 api-key: {{AI_SRCH_API_KEY}}
 
-< ./docs-skillset.json
+< ./definitions/docs-skillset.json
 
 
 ### Indexer --------------------------------------
@@ -105,29 +105,7 @@ PUT {{AI_SRCH_ENDPOINT}}/indexers/{{INDEXER_NAME}}?api-version={{AI_SRCH_API_VER
 Content-Type: application/json
 api-key: {{AI_SRCH_API_KEY}}
 
-{
-    "description": "",
-    "dataSourceName": "{{DATASOURCE_NAME}}",
-    "skillsetName": "{{SKILLSET_NAME}}",
-    "targetIndexName": "{{DOCS_INDEX_NAME}}",
-    "disabled": null,
-    "schedule": {},
-    "parameters": {
-        "batchSize": null,
-        "maxFailedItems": 10,
-        "maxFailedItemsPerBatch": 5,
-        "base64EncodeKeys": null,
-        "configuration": {
-            "dataToExtract": "contentAndMetadata",
-            "parsingMode": "default",
-            "imageAction": "generateNormalizedImages"
-        }
-    },
-    "fieldMappings": [],
-    "outputFieldMappings": [],
-    "cache": null,
-    "encryptionKey": null
-}
+< ./definitions/docs-indexer.json
 
 ### Reset
 POST {{AI_SRCH_ENDPOINT}}/indexers/{{INDEXER_NAME}}/reset?api-version={{AI_SRCH_API_VERSION}}
@@ -171,7 +149,7 @@ POST {{COGNITIVE_MULTI_ACCOUNT_ENDPOINT}}/computervision/retrieval:vectorizeImag
 Content-Type: application/octet-stream
 Ocp-Apim-Subscription-Key: {{COGNITIVE_MULTI_ACCOUNT_API_KEY}}
 
-< ./../images/normalized_images_30.jpg
+< ./images/normalized_images_30.jpg
 
 ### Save value
 @vector_image={{embed_image.response.body.vector}}

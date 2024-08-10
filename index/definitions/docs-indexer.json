@@ -1,0 +1,99 @@
+{
+    "description": "",
+    "dataSourceName": "docs-blob-datasource",
+    "skillsetName": "docs-skillset",
+    "targetIndexName": "docs",
+    "disabled": null,
+    "schedule": {},
+    "parameters": {
+        "batchSize": null,
+        "maxFailedItems": 10,
+        "maxFailedItemsPerBatch": 5,
+        "base64EncodeKeys": null,
+        "configuration": {
+            "dataToExtract": "contentAndMetadata",
+            "parsingMode": "default",
+            "imageAction": "generateNormalizedImages"
+        }
+    },
+    "fieldMappings": [],
+    "outputFieldMappings": [
+        {
+            "sourceFieldName": "/document/persons/*",
+            "targetFieldName": "people",
+            "mappingFunction": null
+        },
+        {
+            "sourceFieldName": "/document/locations/*",
+            "targetFieldName": "locations",
+            "mappingFunction": null
+        },
+        {
+            "sourceFieldName": "/document/organizations/*",
+            "targetFieldName": "organizations",
+            "mappingFunction": null
+        },
+        {
+            "sourceFieldName": "/document/quantities/*",
+            "targetFieldName": "quantities",
+            "mappingFunction": null
+        },
+        {
+            "sourceFieldName": "/document/dateTimes/*",
+            "targetFieldName": "dateTimes",
+            "mappingFunction": null
+        },
+        {
+            "sourceFieldName": "/document/urls/*",
+            "targetFieldName": "urls",
+            "mappingFunction": null
+        },
+        {
+            "sourceFieldName": "/document/emails/*",
+            "targetFieldName": "emails",
+            "mappingFunction": null
+        },
+        {
+            "sourceFieldName": "/document/personTypes/*",
+            "targetFieldName": "personTypes",
+            "mappingFunction": null
+        },
+        {
+            "sourceFieldName": "/document/events/*",
+            "targetFieldName": "events",
+            "mappingFunction": null
+        },
+        {
+            "sourceFieldName": "/document/products/*",
+            "targetFieldName": "products",
+            "mappingFunction": null
+        },
+        {
+            "sourceFieldName": "/document/skills/*",
+            "targetFieldName": "skills",
+            "mappingFunction": null
+        },
+        {
+            "sourceFieldName": "/document/addresses/*",
+            "targetFieldName": "addresses",
+            "mappingFunction": null
+        },
+        {
+            "sourceFieldName": "/document/phoneNumbers/*",
+            "targetFieldName": "phoneNumbers",
+            "mappingFunction": null
+        },
+        {
+            "sourceFieldName": "/document/ipAddresses/*",
+            "targetFieldName": "ipAddresses",
+            "mappingFunction": null
+        },
+        {
+            "sourceFieldName": "/document/namedEntities/*",
+            "targetFieldName": "namedEntities",
+            "mappingFunction": null
+        }
+    ],
+    "cache": null,
+    "encryptionKey": null
+}
